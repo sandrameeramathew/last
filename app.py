@@ -1,72 +1,40 @@
-import streamlit as st
 import pandas as pd
+import numpy as np
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, r2_score
-import matplotlib.pyplot as plt
-import base64
-def add_bg_from_local(image_file):
-    with open(image_file, "rb") as image_file:
-        encoded_string = base64.b64encode(image_file.read())
-    st.markdown(
-    f"""
-    <style>
-    .stApp {{
-        background-image: url(data:image/{"jpg"};base64,{encoded_string.decode()});
-        background-size: cover
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-    )
-add_bg_from_local('sales.jpg')  
 
-# Load the sales data
-sales_df = pd.read_csv('sales_data.csv')
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+df = pd.read_csv('train.csv')
 
-# Create the feature matrix and target vector
-X = sales_df[['item_name', 'day']]
-y = sales_df['sales']
-
-# Convert categorical variables to dummy variables
-X = pd.get_dummies(X, columns=['day', 'item_name'], prefix=['day', 'item_name'])
-
-# Create the linear regression model
+X_train, X_test, y_train, y_test = train_test_split(df[['store', 'item']], df['sales'], test_size=0.2, random_state=42)
+model = RandomForestRegressor()
+model.fit(X_train, y_train)
 model = LinearRegression()
+model.fit(X_train, y_train)
+accuracy = model.score(X_test, y_test)
+print("Accuracy:", accuracy)
+date = '2023-03-12' # Example date
+store = 1 # Example store number
+item = 1 # Example item number
+prediction = model.predict([[store, item]])
+print("Prediction:", prediction)
+import streamlit as st
 
-# Train the model on the sales data
-model.fit(X, y)
+# Load the trained model
+model = LinearRegression()
+model.fit(X_train, y_train)
 
-# Calculate the mean squared error and R^2 score for the model
-y_pred = model.predict(X)
-mse = mean_squared_error(y, y_pred)
-r2 = r2_score(y, y_pred)
-print('Mean squared error: ', mse)
-print('R^2 score:', r2)
+# Create the input form
+st.write("# Sales Prediction App")
+date = st.date_input("Select the date")
+store = st.number_input("Enter the store number", min_value=1, max_value=10)
+item = st.number_input("Enter the item number", min_value=1, max_value=50)
 
-# Get input from user
-item_name =st.selectbox(
-     'select item name',
-    ('vada', 'samoosa', 'cream bun','pazhampori','bajji'))
-day = st.selectbox(
-    'select day',
-    ('Monday', 'Tuesday', 'Wednesday','Thursday','Friday'))
+# Make the prediction
+if st.button("Predict"):
+    prediction = model.predict([[store, item]])
+    st.write("The predicted sales for {} at store {} for item {} is {}".format(date, store, item, prediction))
 
-# Create new input
-X_new = pd.DataFrame({'item_name': [item_name], 'day': [day]})
-X_new = pd.get_dummies(X_new, columns=['day', 'item_name'], prefix=['day', 'item_name'])
-
-# Add missing dummy variables
-missing_cols = set(X.columns) - set(X_new.columns)
-for col in missing_cols:
-    X_new[col] = 0
-
-# Ensure columns are in the same order
-X_new = X_new[X.columns]
-
-# Predict the sales for the new input
-y_new = model.predict(X_new)
-if st.button('Predict'):
-    st.write('Predicted sales: ', y_new[0])
    
     
     
