@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import train_test_split
+import base64
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
