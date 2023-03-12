@@ -38,8 +38,7 @@ print("model used:",model)
 print("r2:", accuracy)
 
 def make_prediction(date, store, item):
-    date_obj = datetime.strptime(date, '%Y-%m-%d')
-    prediction = model.predict([[store, item, date_obj]])
+    prediction = model.predict([[store, item, date]])
     return prediction[0]
 
 import streamlit as st
