@@ -9,6 +9,7 @@ import base64
 from sklearn.model_selection import train_test_split
 from datetime import datetime
 
+
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read())
@@ -25,37 +26,23 @@ def add_bg_from_local(image_file):
     )
 add_bg_from_local('ss.jpg')  
 
-# Load the dataset
+ 
 df = pd.read_csv('train.csv')
 
-# Preprocess the date column
-df['date'] = pd.to_datetime(df['date'])
-df['year'] = df['date'].dt.year
-df['month'] = df['date'].dt.month
-df['day'] = df['date'].dt.day
-df['day_of_week'] = df['date'].dt.dayofweek
-
-# Split the data into training and testing sets
-X_train, X_test, y_train, y_test = train_test_split(df[['store', 'item', 'year', 'month', 'day', 'day_of_week']], df['sales'], test_size=0.2, random_state=42)
-
-# Train a machine learning model
+X_train, X_test, y_train, y_test = train_test_split(df[['store', 'item', 'date']], df['sales'], test_size=0.2, random_state=42)
 model = DecisionTreeRegressor()
-model.fit(X_train, y_train)
+model.fit(X_train[['store', 'item']], y_train)
 
-# Evaluate the model
-accuracy = model.score(X_test, y_test)
+accuracy = model.score(X_test[['store', 'item']], y_test)
 print("model used:",model)
 print("r2:", accuracy)
 
-# Define a function to make predictions
 def make_prediction(date, store, item):
     date_obj = datetime.strptime(date, '%Y-%m-%d')
-    year = date_obj.year
-    month = date_obj.month
-    day = date_obj.day
-    day_of_week = date_obj.weekday()
-    prediction = model.predict([[store, item, year, month, day, day_of_week]])
+    prediction = model.predict([[store, item, date_obj]])
     return prediction[0]
+
+import streamlit as st
 
 # Create the input form
 st.write("# Sales Prediction App")
