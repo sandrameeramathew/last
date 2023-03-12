@@ -3,7 +3,6 @@ import numpy as np
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
-from xgboost import XGBRegressor
 from sklearn.ensemble import RandomForestRegressor
 import streamlit as st
 from sklearn.model_selection import train_test_split
