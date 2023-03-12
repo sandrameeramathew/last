@@ -9,18 +9,14 @@ model = DecisionTreeRegressor()
 model.fit(X_train, y_train)
 accuracy = model.score(X_test, y_test)
 print("r2:", accuracy)
-
 prediction = model.predict([[store, item]])
 print("Prediction:", prediction)
 import streamlit as st
-
-
 # Create the input form
 st.write("# Sales Prediction App")
 date = st.date_input("Select the date")
 store = st.number_input("Enter the store number", min_value=1, max_value=10)
 item = st.number_input("Enter the item number", min_value=1, max_value=50)
-
 # Make the prediction
 if st.button("Predict"):
     prediction = model.predict([[store, item]])
