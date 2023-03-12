@@ -1,9 +1,14 @@
+
+import streamlit as st
 import pandas as pd
-import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
 import base64
+from sklearn.model_selection import train_test_split
+
+
 
 def add_bg_from_local(image_file):
     with open(image_file, "rb") as image_file:
@@ -20,6 +25,8 @@ def add_bg_from_local(image_file):
     unsafe_allow_html=True
     )
 add_bg_from_local('ss.jpg')  
+
+ 
 df = pd.read_csv('train.csv')
 
 X_train, X_test, y_train, y_test = train_test_split(df[['store', 'item']], df['sales'], test_size=0.2, random_state=42)
