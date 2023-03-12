@@ -37,9 +37,21 @@ accuracy = model.score(X_test[['store', 'item']], y_test)
 print("model used:",model)
 print("r2:", accuracy)
 
+from datetime import datetime
+
 def make_prediction(date, store, item):
-    prediction = model.predict([[store, item, date]])
-    return prediction[0]
+    # Convert date to string
+    date_str = date.strftime('%Y-%m-%d')
+    
+    # Convert date string to datetime object
+    date_obj = datetime.strptime(date_str, '%Y-%m-%d')
+    
+    # Add date, store, and item to the list of features
+    features = [date_obj.year, date_obj.month, date_obj.day, store, item]
+    
+    # Make the prediction
+    prediction = model.predict([features])[0]
+    return prediction
 
 import streamlit as st
 
