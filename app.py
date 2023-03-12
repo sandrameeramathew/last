@@ -2,9 +2,6 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
-from xgboost import XGBRegressor
-
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 df = pd.read_csv('train.csv')
 
