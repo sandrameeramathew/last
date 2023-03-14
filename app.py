@@ -35,7 +35,7 @@ model.fit(X_train, y_train)
 accuracy = model.score(X_test, y_test)
 print("model used:",model)
 print("r2:", accuracy)
-date = '2023-03-12' # Example date
+day = '0' # Example day
 store = 1 # Example store number
 item = 1 # Example item number
 prediction = model.predict([[day,store, item]])
@@ -44,7 +44,7 @@ import streamlit as st
 
 # Create the input form
 st.write("# Sales Prediction App")
-date = st.date_input("Select the date")
+date = st.number_input("Select the day")
 store = st.number_input("Enter the store number", min_value=1, max_value=10)
 item = st.number_input("Enter the item number", min_value=1, max_value=50)
 
