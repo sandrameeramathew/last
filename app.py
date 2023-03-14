@@ -44,7 +44,7 @@ import streamlit as st
 
 # Create the input form
 st.write("# Sales Prediction App")
-date = st.number_input("Select the day",min_value=1, max_value=6)
+date = st.date_input("Select the date",min_value=1, max_value=6)
 store = st.number_input("Enter the store number", min_value=1, max_value=10)
 item = st.number_input("Enter the item number", min_value=1, max_value=50)
 
